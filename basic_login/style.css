@@ -1,0 +1,38 @@
+
+
+form{
+    text-align: center;
+    
+}
+
+.a{
+    margin: 10px;
+    text-align: center;
+}
+.b{
+    margin: 10px;
+    text-align: center;
+}
+
+.c{
+    background-color: rgb(78, 65, 192);
+    border: yellow 1px;
+    align-items: center;
+    width: 15%;
+    margin: auto;
+    padding: 30px;
+    border-radius: 30px;
+}
+
+.sub-button{
+    padding: 5px;
+    margin: auto;
+    background-color: rgb(98, 165, 98);
+    display: inline;
+    border-radius: 10px;
+    border: none;
+}
+
+input{
+    padding: 15px;
+}
