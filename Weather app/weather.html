@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Weather</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body id="color-determiner">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 mx-auto">
+                    <h2 class="mx-auto text-center">Weather</h2>
+                    <div class="card p-3">
+                        <div class="row">
+                            <div class="col-md-6">    
+                                <div class="card"">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Date</li>
+                                        <li class="list-group-item">Temperature</li>
+                                        <li class="list-group-item">Wind Speed</li>
+                                        <li class="list-group-item">AvG Temperature</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">    
+                                <div class="card"">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item" id="date">date</li>
+                                        <li class="list-group-item" id="temp" onchange="colorer(this)">55</li>
+                                        <li class="list-group-item" id="ws">22</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tester">
+
+                </div>
+            </div>
+        </div>
+        <script>
+            // fetch('https://api.open-meteo.com/v1/forecast?latitude=8.4855&longitude=76.9492&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m')
+            // .then((response)=>{return response.json()})
+            // .then(p => {console.log(p)})
+            // .then(data => {
+            //     document.getElementById('date').innerHTML=data.current.time.slice(0, 10)
+            //     document.getElementById('temp').innerHTML=data.current.temperature_2m
+            //     document.getElementById('ws').innerHTML=data.current.wind_speed_10m
+            //     var temp= data.current.temperature_2m
+            // })
+            
+            const arr=[1,2,3,4,5,6,7,8,9]
+            const even = arr.filter(checkEven);
+            const double = arr.map(doubler);
+            const averager = (arr.reduce(summer)/arr.length)
+
+            console.log(arr,even,double,averager)
+
+            function summer(total,num){
+                return total+num;
+            }
+
+            function doubler(num){
+                return num*2;
+            }
+
+            function checkEven(num){
+                if (num%2==0){
+                    return num
+                }
+            }
+
+
+            // if (parseInt(temp)<40){
+            //         document.getElementById("color-determiner").classList.add("bg-dark text-white")
+            //         console.log("Ivide ethi")
+            // }
+            
+            
+        </script>
+</html>
