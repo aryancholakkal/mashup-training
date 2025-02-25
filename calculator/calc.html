@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .calculator {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+        .calculator-screen {
+            height: 80px;
+            font-size: 2.5rem;
+            text-align: right;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+        .calculator-keys button {
+            height: 60px;
+            font-size: 1.5rem;
+        }
+        .history {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="number1">Number 1:</label>
+                    <input type="number" id="number1" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="number2">Number 2:</label>
+                    <input type="number" id="number2" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="operation">Operation:</label>
+                    <select id="operation" class="form-control">
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="*">*</option>
+                        <option value="/">/option>
+                    </select>
+                </div>
+                <button id="calculate" class="btn btn-primary btn-block">Calculate</button>
+                <div class="history card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">History</h5>
+                        <ul id="history" class="list-group">
+                            <!-- Calculation history will be appended here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('calculate').addEventListener('click', function() {
+            const number1 = parseFloat(document.getElementById('number1').value);
+            const number2 = parseFloat(document.getElementById('number2').value);
+            const operation = document.getElementById('operation').value;
+            let result;
+
+            if (isNaN(number1) || isNaN(number2)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+
+            switch (operation) {
+                case '+':
+                    result = number1 + number2;
+                    break;
+                case '-':
+                    result = number1 - number2;
+                    break;
+                case '*':
+                    result = number1 * number2;
+                    break;
+                case '/':
+                    if (number2 === 0) {
+                        alert('Cannot divide by zero');
+                        return;
+                    }
+                    result = number1 / number2;
+                    break;
+                default:
+                    alert('Invalid operation');
+                    return;
+            }
+
+            const historyItem = document.createElement('li');
+            historyItem.className = 'list-group-item';
+            historyItem.textContent = `${number1} ${operation} ${number2} = ${result}`;
+            document.getElementById('history').appendChild(historyItem);
+        });
+    </script>
+</body>
+</html>
