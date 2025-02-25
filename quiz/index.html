@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+</head>
+<body>
+    <main class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">Quiz Master</h1>
+        </div>
+
+        <div class="score-panel">
+            <div class="score-item">
+                <h5>Current Score</h5>
+                <p id="score" class="font-weight-bold">0</p>
+            </div>
+            <div class="score-item">
+                <h5>High Score</h5>
+                <p id="high-score" class="font-weight-bold">0</p>
+            </div>
+        </div>
+
+        <div class="question-box">
+            <div id="question-text" class="mb-4"></div>
+            <div id="answers">
+                <input type="radio" name="ans" id="opt-1">
+                <label for="opt-1" class="answer-option"></label>
+                
+                <input type="radio" name="ans" id="opt-2">
+                <label for="opt-2" class="answer-option"></label>
+                
+                <input type="radio" name="ans" id="opt-3">
+                <label for="opt-3" class="answer-option"></label>
+                
+                <input type="radio" name="ans" id="opt-4">
+                <label for="opt-4" class="answer-option"></label>
+            </div>
+        </div>
+
+        <div id="result-message" class="hidden"></div>
+
+        <div class="text-center">
+            <button class="btn btn-primary" id="next-btn">Next Question</button>
+        </div>
+    </main>
+
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+        let questions = [];
+
+        // Initialize high score display
+        document.getElementById('high-score').textContent = highScore;
+
+        // Fetch questions from API
+        fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple')
+            .then(response => response.json())
+            .then(data => {
+                questions = data.results;
+                showQuestion();
+            });
+
+        function showQuestion() {
+            if (currentQuestion >= questions.length) {
+                endQuiz();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            document.getElementById('question-text').textContent = decodeHtml(question.question);
+            
+            const answers = [...question.incorrect_answers, question.correct_answer];
+            answers.sort(() => Math.random() - 0.5);
+
+            const labels = document.querySelectorAll('.answer-option');
+            labels.forEach((label, index) => {
+                label.textContent = decodeHtml(answers[index]);
+                label.previousElementSibling.value = answers[index];
+            });
+        }
+
+        function decodeHtml(html) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            const selected = document.querySelector('input[name="ans"]:checked');
+            
+            if (selected) {
+                const correctAnswer = questions[currentQuestion].correct_answer;
+                if (selected.value === correctAnswer) {
+                    score++;
+                    document.getElementById('score').textContent = score;
+                    showFeedback('Correct!', 'green');
+                } else {
+                    showFeedback(`Wrong! Correct answer: ${correctAnswer}`, 'red');
+                }
+
+                currentQuestion++;
+                setTimeout(() => {
+                    resetOptions();
+                    showQuestion();
+                }, 1500);
+            } else {
+                alert('Please select an answer!');
+            }
+        });
+
+        function resetOptions() {
+            document.querySelectorAll('input[name="ans"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.getElementById('result-message').classList.add('hidden');
+        }
+
+        function showFeedback(message, color) {
+            const feedback = document.getElementById('result-message');
+            feedback.textContent = message;
+            feedback.style.color = color;
+            feedback.classList.remove('hidden');
+        }
+
+        function endQuiz() {
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('highScore', highScore);
+                document.getElementById('high-score').textContent = highScore;
+            }
+
+            document.getElementById('question-text').innerHTML = `
+                <h2 class="text-center">Quiz Complete!</h2>
+                <p class="text-center">Your final score: ${score}/${questions.length}</p>
+            `;
+            document.getElementById('answers').classList.add('hidden');
+            document.getElementById('next-btn').textContent = 'Play Again';
+            document.getElementById('next-btn').onclick = () => location.reload();
+        }
+    </script>
+</body>
+</html>
